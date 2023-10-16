@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "959486822546",
+    "project_id": "loginwithfirebase-jgs",
+    "storage_bucket": "loginwithfirebase-jgs.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:959486822546:android:5084280d49f00463b87e4b",
+        "android_client_info": {
+          "package_name": "com.jgs.loginwithfirebase"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBYdQzUxaIk_-IBrNyMXd_P43erXGVgbTs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
