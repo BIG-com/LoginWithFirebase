@@ -68,6 +68,27 @@ public class MainActivity extends AppCompatActivity {
         //-------------------------------------------------------------------------------------------------
 
         //최근에 로그인 했는지 확인해서 자동 로그인
+
+        // NO 1. 버벅임 없이 자동 로그인
+        /*
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        if(user != null){
+            // user is signed in
+            Intent intent = new Intent(MainActivity.this, LoginSucessActivity.class);
+            startActivity(intent);
+            finish();
+        }
+        else {
+            // no user is signed in
+        }*/
+
+
+        // NO 2. 버벅임 있는데 자동로그인
+        /*
+        getCurrentUser가 null이 아닌 FirebaseUser를 반환하지만 기본 토큰이 유효하지 않은 경우가 있습니다.
+        예를 들어 사용자가 다른 기기에서 삭제되었는데 로컬 토큰을 새로고침하지 않은 경우가 여기에 해당합니다.
+        이 경우 유효한 사용자 getCurrentUser를 가져올 수 있지만, 인증 리소스에 대한 후속 호출이 실패합니다.
+        위의 특이한 사례에 대처가능함*/
         firebaseAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -76,7 +97,9 @@ public class MainActivity extends AppCompatActivity {
                     Intent intent = new Intent(MainActivity.this, LoginSucessActivity.class);
                     startActivity(intent);
                     finish();
-                } else {
+                }
+                else {
+
                 }
             }
         };
@@ -107,6 +130,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        firebaseAuth.addAuthStateListener(firebaseAuthListener);
+
     }
 
     @Override
