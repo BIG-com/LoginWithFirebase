@@ -118,12 +118,12 @@ public class MainActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful() && firebaseAuth.getCurrentUser().isEmailVerified()) {
+                        if (task.isSuccessful() && firebaseAuth.getCurrentUser().isEmailVerified()==true) {
                             // 로그인 성공
                             Toast.makeText(MainActivity.this, "로그인 성공", Toast.LENGTH_SHORT).show();
 
                             firebaseAuth.addAuthStateListener(firebaseAuthListener);
-                        } else if (!firebaseAuth.getCurrentUser().isEmailVerified()) {
+                        } else if (firebaseAuth.getCurrentUser().isEmailVerified()==false) {
                             Toast.makeText(MainActivity.this, "이메일 인증이 되지 않았습니다", Toast.LENGTH_SHORT).show();
                         } else {
                             // 로그인 실패

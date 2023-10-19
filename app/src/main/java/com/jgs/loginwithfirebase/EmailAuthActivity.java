@@ -21,16 +21,17 @@ public class EmailAuthActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private Button btn_auth_email_resend;
     private Button btn_auth_email_complete;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_email_auth);
 
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        FirebaseUser user = auth.getCurrentUser();
+        firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = firebaseAuth.getCurrentUser();
 
-        Button btn_auth_email_resend = (Button) findViewById(R.id.btn_auth_email_resend);
-        Button btn_auth_email_complete = (Button) findViewById(R.id.btn_auth_email_complete);
+        btn_auth_email_resend = (Button) findViewById(R.id.btn_auth_email_resend);
+        btn_auth_email_complete = (Button) findViewById(R.id.btn_auth_email_complete);
 
 
         user.sendEmailVerification()
@@ -61,18 +62,24 @@ public class EmailAuthActivity extends AppCompatActivity {
         btn_auth_email_complete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (firebaseAuth.getCurrentUser().isEmailVerified()) {
+                if (firebaseAuth.getCurrentUser().isEmailVerified()==true) {
                     Toast.makeText(EmailAuthActivity.this, "이메일 인증이 되었습니다", Toast.LENGTH_SHORT).show();
                     //Intent EmailToMain = new Intent(EmailAuthActivity.this, MainActivity.class);
                     //startActivity(EmailToMain);
                     //finish();
                 }
-                else {
+                else if (firebaseAuth.getCurrentUser().isEmailVerified()==false){
                     Toast.makeText(EmailAuthActivity.this, "재전송 버튼 눌러주세요", Toast.LENGTH_SHORT).show();
 
                 }
             }
         });
+
+
+
+        // todo 이메일 인증창에 첫 로그인 화면 만들기
+        //  Because getCurrentUser는 최근에 로그인 했던 이메일을 불러올 수 있음
+        //  So 로그인 창에서만 "firebaseAuth.getCurrentUser().isEmailVerified()==true"이 문장이 활성화됨
 
 
     }
