@@ -70,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
         //최근에 로그인 했는지 확인해서 자동 로그인
 
         // NO 1. 버벅임 없이 자동 로그인
+
         /*
         FirebaseUser user = firebaseAuth.getCurrentUser();
         if(user != null){
@@ -84,21 +85,25 @@ public class MainActivity extends AppCompatActivity {
 
 
         // NO 2. 버벅임 있는데 자동로그인
+
         /*
         getCurrentUser가 null이 아닌 FirebaseUser를 반환하지만 기본 토큰이 유효하지 않은 경우가 있습니다.
         예를 들어 사용자가 다른 기기에서 삭제되었는데 로컬 토큰을 새로고침하지 않은 경우가 여기에 해당합니다.
         이 경우 유효한 사용자 getCurrentUser를 가져올 수 있지만, 인증 리소스에 대한 후속 호출이 실패합니다.
-        위의 특이한 사례에 대처가능함*/
+        위의 특이한 사례에 대처가능함
+        */
+
+        // 결론 -> NO 2 를 사용하는데 있어 애니메이션을 추가 시켜서 로딩창을 제공함
         firebaseAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    Intent intent = new Intent(MainActivity.this, LoginSucessActivity.class);
-                    startActivity(intent);
-                    finish();
+                if (user != null) { // 자동으로 로그인 된 케이스
+                    //Intent intent = new Intent(MainActivity.this, LoginSucessActivity.class);
+                    //startActivity(intent);
+                    //finish();
                 }
-                else {
+                else {// 자동으로 로그인 안된 케이스
 
                 }
             }
@@ -113,10 +118,13 @@ public class MainActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
+                        if (task.isSuccessful() && firebaseAuth.getCurrentUser().isEmailVerified()) {
                             // 로그인 성공
                             Toast.makeText(MainActivity.this, "로그인 성공", Toast.LENGTH_SHORT).show();
+
                             firebaseAuth.addAuthStateListener(firebaseAuthListener);
+                        } else if (!firebaseAuth.getCurrentUser().isEmailVerified()) {
+                            Toast.makeText(MainActivity.this, "이메일 인증이 되지 않았습니다", Toast.LENGTH_SHORT).show();
                         } else {
                             // 로그인 실패
                             Toast.makeText(MainActivity.this, "아이디 또는 비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show();
@@ -128,14 +136,14 @@ public class MainActivity extends AppCompatActivity {
     //-------------------------------------------------------------------------------------------------
 
     @Override
-    protected void onStart() {
+    protected void onStart() { // 앱이 시작될 때 Listener 설정
         super.onStart();
         firebaseAuth.addAuthStateListener(firebaseAuthListener);
 
     }
 
     @Override
-    protected void onStop() {
+    protected void onStop() { //앱이 종료될 때 Listener 해제
         super.onStop();
         if (firebaseAuthListener != null) {
             firebaseAuth.removeAuthStateListener(firebaseAuthListener);

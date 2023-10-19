@@ -1,5 +1,6 @@
 package com.jgs.loginwithfirebase;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -45,7 +46,7 @@ public class JoinActivity extends AppCompatActivity {
 
         //-------------------------------------------------------------------------------------------------
 
-        //가입버튼 클릭시 공백확인
+        //가입 버튼 클릭시 공백 확인
         buttonJoin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,11 +60,17 @@ public class JoinActivity extends AppCompatActivity {
                 }
             }
         });
+
+        //--------------------------------------------------------------------------------------------------
+
+
+
+
     }
 
     //-------------------------------------------------------------------------------------------------
 
-    //파이어베이스 DB에 계정 중복 확인
+    //파이어 베이스 DB에 계정 중복 확인
     private void createUser(String email, String password, String name) {
         firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -72,6 +79,8 @@ public class JoinActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // 회원가입 성공시
                             Toast.makeText(JoinActivity.this, "회원가입 성공", Toast.LENGTH_SHORT).show();
+                            Intent JoinToEmail = new Intent(JoinActivity.this, EmailAuthActivity.class);
+                            startActivity(JoinToEmail);
                             finish();
                         } else {
                             // 계정이 중복된 경우
