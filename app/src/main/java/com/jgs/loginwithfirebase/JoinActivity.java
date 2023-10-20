@@ -79,7 +79,7 @@ public class JoinActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // 회원가입 성공시
                             Toast.makeText(JoinActivity.this, "회원가입 성공", Toast.LENGTH_SHORT).show();
-                            Intent JoinToEmail = new Intent(JoinActivity.this, EmailAuthActivity.class);
+                            Intent JoinToEmail = new Intent(JoinActivity.this, FirstLoginActivity.class);
                             startActivity(JoinToEmail);
                             finish();
                         } else {

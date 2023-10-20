@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
+    tools:context=".FirstLoginActivity"
     android:orientation="vertical"
     android:padding="30dp">
 
@@ -14,7 +14,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         tools:context=".LogInActivity">
-
         <ImageView
             android:id="@+id/imageView"
             android:layout_gravity="center"
@@ -58,49 +57,14 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="로그인" />
-
             <Button
-                android:id="@+id/btn_signup"
+                android:id="@+id/btn_auth_email_resend"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="10dp"
-                android:text="회원가입"/>
+                android:layout_gravity="center"
+                android:text="이메일 재전송"/>
+
+
         </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp">
-            <Button
-                android:id="@+id/btn_search_id"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minWidth="0dp"
-                android:text="아이디 찾기"
-                android:textColor="@color/black"
-                android:textSize="12dp"
-                android:background="#00ff0000"
-                android:padding="1dp"/>
-            <Button
-                android:id="@+id/btn_search_passa"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minWidth="0dp"
-                android:text="비밀번호 찾기"
-                android:textColor="@color/black"
-                android:textSize="12dp"
-                android:background="#00ff0000"
-                android:layout_marginLeft="10dp"
-                android:padding="1dp"/>
-        </LinearLayout>
-
     </LinearLayout>
-
-
-
-
 </LinearLayout>

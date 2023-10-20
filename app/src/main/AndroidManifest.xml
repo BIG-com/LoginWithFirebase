@@ -16,7 +16,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".EmailAuthActivity"
+            android:name=".FirstLoginActivity"
             android:screenOrientation="portrait"
             android:exported="false" />
         <activity
