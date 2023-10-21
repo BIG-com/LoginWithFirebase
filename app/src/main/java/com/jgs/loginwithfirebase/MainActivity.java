@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 
 import java.util.ArrayList;
 
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText editTextPassword;
     private Button buttonLogIn;
     private Button buttonSignUp;
+    private Button btn_search_id;
 
 
     @Override
@@ -41,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
         editTextPassword = (EditText) findViewById(R.id.edittext_password);
 
         buttonSignUp = (Button) findViewById(R.id.btn_signup);
+
+        btn_search_id = (Button) findViewById(R.id.btn_search_id);
 
         //-------------------------------------------------------------------------------------------------
 
@@ -104,9 +108,25 @@ public class MainActivity extends AppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null && firebaseAuth.getCurrentUser().isEmailVerified()==true) { // 자동으로 로그인 된 케이스
-                    Intent intent = new Intent(MainActivity.this, LoginSucessActivity.class);
-                    startActivity(intent);
-                    finish();
+                    //휴대폰의 저장된 토큰이 데이터베이스에 토큰이 지금도 존재하는지 확인
+                    user.getIdToken(true)
+                            .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<GetTokenResult> task) {
+                                    if (task.isSuccessful()){
+
+                                        //Send token to your backend via HTTPS
+                                        //String idToken = task.getResult().getToken();
+
+                                        //유저의 이메일을 토스트
+                                        //Toast.makeText(MainActivity.this, user.getEmail(), Toast.LENGTH_SHORT).show();
+
+                                        Intent intent = new Intent(MainActivity.this, LoginSucessActivity.class);
+                                        startActivity(intent);
+                                        finish();
+                                    }
+                                }
+                            });
                 }
                 else {// 자동으로 로그인 안된 케이스
 
