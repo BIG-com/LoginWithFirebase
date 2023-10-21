@@ -1,5 +1,6 @@
 package com.jgs.loginwithfirebase;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -11,10 +12,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -24,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText editTextPassword;
     private Button buttonLogIn;
     private Button buttonSignUp;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,8 +76,8 @@ public class MainActivity extends AppCompatActivity {
 
         // NO 1. 버벅임 없이 자동 로그인
 
-        /*
-        FirebaseUser user = firebaseAuth.getCurrentUser();
+
+        /*FirebaseUser user = firebaseAuth.getCurrentUser();
         if(user != null){
             // user is signed in
             Intent intent = new Intent(MainActivity.this, LoginSucessActivity.class);
@@ -98,10 +103,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) { // 자동으로 로그인 된 케이스
-                    //Intent intent = new Intent(MainActivity.this, LoginSucessActivity.class);
-                    //startActivity(intent);
-                    //finish();
+                if (user != null && firebaseAuth.getCurrentUser().isEmailVerified()==true) { // 자동으로 로그인 된 케이스
+                    Intent intent = new Intent(MainActivity.this, LoginSucessActivity.class);
+                    startActivity(intent);
+                    finish();
                 }
                 else {// 자동으로 로그인 안된 케이스
 
@@ -118,20 +123,24 @@ public class MainActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful() && firebaseAuth.getCurrentUser().isEmailVerified()==true) {
+                        if (task.isSuccessful() == true && firebaseAuth.getCurrentUser().isEmailVerified()==true) {
                             // 로그인 성공
                             Toast.makeText(MainActivity.this, "로그인 성공", Toast.LENGTH_SHORT).show();
 
                             firebaseAuth.addAuthStateListener(firebaseAuthListener);
-                        } else if (firebaseAuth.getCurrentUser().isEmailVerified()==false) {
+                        }
+                        else if (task.isSuccessful() == true && firebaseAuth.getCurrentUser().isEmailVerified()==false) {
+                            // 로그인 실패 (이메일 인증 X)
                             Toast.makeText(MainActivity.this, "이메일 인증이 되지 않았습니다", Toast.LENGTH_SHORT).show();
-                        } else {
+                        } else if (task.isSuccessful() == false){
                             // 로그인 실패
                             Toast.makeText(MainActivity.this, "아이디 또는 비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show();
-                        }
+                        }else { }
                     }
                 });
+
     }
+
 
     //-------------------------------------------------------------------------------------------------
 

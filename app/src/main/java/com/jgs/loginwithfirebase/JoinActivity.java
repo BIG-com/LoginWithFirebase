@@ -81,7 +81,6 @@ public class JoinActivity extends AppCompatActivity {
                             Toast.makeText(JoinActivity.this, "회원가입 성공", Toast.LENGTH_SHORT).show();
                             Intent JoinToEmail = new Intent(JoinActivity.this, FirstLoginActivity.class);
                             startActivity(JoinToEmail);
-                            finish();
                         } else {
                             // 계정이 중복된 경우
                             Toast.makeText(JoinActivity.this, "이미 존재하는 계정입니다.", Toast.LENGTH_SHORT).show();

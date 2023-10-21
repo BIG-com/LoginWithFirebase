@@ -5,6 +5,7 @@ import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -89,11 +90,6 @@ public class FirstLoginActivity extends AppCompatActivity {
 
         //--------------------------------------------------------------------------------------------
 
-        // todo 이메일 인증창에 첫 로그인 화면 만들기
-        //  Because getCurrentUser는 최근에 로그인 했던 이메일을 불러올 수 있음
-        //  So 로그인 창에서만 "firebaseAuth.getCurrentUser().isEmailVerified()==true"이 문장이 활성화됨
-
-
     }
 
     //파이어베이스 정보와 입력한 값이랑 같으면 로그인
@@ -106,7 +102,12 @@ public class FirstLoginActivity extends AppCompatActivity {
                             // 로그인 성공
                             Toast.makeText(FirstLoginActivity.this, "로그인 성공", Toast.LENGTH_SHORT).show();
 
-                            firebaseAuth.addAuthStateListener(firebaseAuthListener);
+                            Intent FirstLoginToLoginSuccess = new Intent(FirstLoginActivity.this, LoginSucessActivity.class);
+                            FirstLoginToLoginSuccess.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);//액티비티 스택제거
+                            startActivity(FirstLoginToLoginSuccess);
+                            finish();
+
+
                         } else if (firebaseAuth.getCurrentUser().isEmailVerified()==false) {
                             Toast.makeText(FirstLoginActivity.this, "이메일 인증이 되지 않았습니다", Toast.LENGTH_SHORT).show();
                         } else {
@@ -115,5 +116,14 @@ public class FirstLoginActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+    //--------------------------------------------------------------------------------------------
+
+    @Override
+    public void onBackPressed() {
+
+        firebaseAuth.getCurrentUser().delete();
+
+        super.onBackPressed();
     }
 }
