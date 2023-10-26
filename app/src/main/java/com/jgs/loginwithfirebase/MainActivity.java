@@ -1,6 +1,5 @@
 package com.jgs.loginwithfirebase;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -12,14 +11,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
-
-import java.util.ArrayList;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -30,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
     private Button buttonLogIn;
     private Button buttonSignUp;
     private Button btn_search_id;
+    private Button btn_search_pwd;
+    private FirebaseFirestore firebaseDB;
 
 
     @Override
@@ -37,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        firebaseDB = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
 
         editTextEmail = (EditText) findViewById(R.id.edittext_email);
@@ -45,6 +45,9 @@ public class MainActivity extends AppCompatActivity {
         buttonSignUp = (Button) findViewById(R.id.btn_signup);
 
         btn_search_id = (Button) findViewById(R.id.btn_search_id);
+        btn_search_pwd = (Button) findViewById(R.id.btn_search_pwd);
+
+
 
         //-------------------------------------------------------------------------------------------------
 
@@ -73,6 +76,31 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+        //-------------------------------------------------------------------------------------------------
+
+        // 아이디 찾기 버튼 클릭시 이벤트
+        btn_search_id.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent MainToSearchID = new Intent(MainActivity.this, SearchIDActivity.class);
+                startActivity(MainToSearchID);
+            }
+        });
+
+        //-------------------------------------------------------------------------------------------------
+
+        // 아이디 찾기 버튼 클릭시 이벤트
+        btn_search_pwd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent MainToSearchPWD = new Intent(MainActivity.this, SearchPWDActivity.class);
+                startActivity(MainToSearchPWD);
+            }
+        });
+
+
+
+
 
         //-------------------------------------------------------------------------------------------------
 
@@ -121,9 +149,9 @@ public class MainActivity extends AppCompatActivity {
                                         //유저의 이메일을 토스트
                                         //Toast.makeText(MainActivity.this, user.getEmail(), Toast.LENGTH_SHORT).show();
 
-                                        Intent intent = new Intent(MainActivity.this, LoginSucessActivity.class);
-                                        startActivity(intent);
-                                        finish();
+//                                        Intent intent = new Intent(MainActivity.this, LoginSucessActivity.class);
+//                                        startActivity(intent);
+//                                        finish();
                                     }
                                 }
                             });

@@ -86,7 +86,7 @@
                 android:background="#00ff0000"
                 android:padding="1dp"/>
             <Button
-                android:id="@+id/btn_search_passa"
+                android:id="@+id/btn_search_pwd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:minWidth="0dp"

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SearchPWDActivity"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="50dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Email ( * )"
+            android:textSize="30dp"
+            android:layout_marginTop="200dp"/>
+        <EditText
+            android:id="@+id/pwdFindCheckEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="250dp"
+            android:hint="Email"
+            android:layout_marginHorizontal="20dp"/>
+        <TextView
+            android:id="@+id/pwdResetEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="비밀번호 재설정 이메일이 전송되었습니다"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="290dp"
+            android:textColor="#C62828"
+            android:visibility="invisible"/>
+
+        <Button
+            android:id="@+id/pwdFindBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="비밀번호 찾기"
+            android:textColor="@color/black"
+            android:background="#00ff0000"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="400dp"/>
+
+
+
+
+
+
+    </RelativeLayout>
+
+</LinearLayout>
