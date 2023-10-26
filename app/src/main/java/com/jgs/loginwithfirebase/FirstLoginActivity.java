@@ -18,10 +18,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class FirstLoginActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
-    private FirebaseAuth.AuthStateListener firebaseAuthListener;
+    private FirebaseUser user;
+    private FirebaseFirestore firebaseDB;
     private EditText editTextEmail;
     private EditText editTextPassword;
     private Button buttonLogIn;
@@ -36,7 +38,8 @@ public class FirstLoginActivity extends AppCompatActivity {
         //--------------------------------------------------------------------------------------------
 
         firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseUser user = firebaseAuth.getCurrentUser();
+        user = firebaseAuth.getCurrentUser();
+        firebaseDB = FirebaseFirestore.getInstance();
 
         editTextEmail = (EditText) findViewById(R.id.edittext_email);
         editTextPassword = (EditText) findViewById(R.id.edittext_password);
@@ -123,6 +126,7 @@ public class FirstLoginActivity extends AppCompatActivity {
     public void onBackPressed() {
 
         firebaseAuth.getCurrentUser().delete();
+        firebaseDB.document(user.getUid()).delete();
 
         super.onBackPressed();
     }

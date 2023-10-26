@@ -22,13 +22,14 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener firebaseAuthListener;
+    private FirebaseFirestore firebaseDB;
     private EditText editTextEmail;
     private EditText editTextPassword;
     private Button buttonLogIn;
     private Button buttonSignUp;
     private Button btn_search_id;
     private Button btn_search_pwd;
-    private FirebaseFirestore firebaseDB;
+
 
 
     @Override
@@ -149,9 +150,9 @@ public class MainActivity extends AppCompatActivity {
                                         //유저의 이메일을 토스트
                                         //Toast.makeText(MainActivity.this, user.getEmail(), Toast.LENGTH_SHORT).show();
 
-//                                        Intent intent = new Intent(MainActivity.this, LoginSucessActivity.class);
-//                                        startActivity(intent);
-//                                        finish();
+                                        Intent intent = new Intent(MainActivity.this, LoginSucessActivity.class);
+                                        startActivity(intent);
+                                        finish();
                                     }
                                 }
                             });
