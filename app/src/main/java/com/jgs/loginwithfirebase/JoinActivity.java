@@ -1,7 +1,10 @@
 package com.jgs.loginwithfirebase;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,10 +14,17 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class JoinActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
@@ -22,7 +32,8 @@ public class JoinActivity extends AppCompatActivity {
     private EditText editTextPassword;
     private EditText editTextName;
     private Button buttonJoin;
-    private FirebaseAnalytics mFirebaseAnalytics;
+    private FirebaseFirestore firebaseDB;
+    private Map<String, Object> UsersInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,12 +42,10 @@ public class JoinActivity extends AppCompatActivity {
 
         //-------------------------------------------------------------------------------------------------
 
-        // 파이어베이스 애널리스트(속성값)
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-
-        //-------------------------------------------------------------------------------------------------
-
         firebaseAuth = FirebaseAuth.getInstance();
+        firebaseDB = FirebaseFirestore.getInstance();
+        UsersInfo = new HashMap<>();
+
 
         editTextEmail = (EditText) findViewById(R.id.editText_email);
         editTextPassword = (EditText) findViewById(R.id.editText_passWord);
@@ -50,10 +59,39 @@ public class JoinActivity extends AppCompatActivity {
         buttonJoin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                // 이메일과 비밀번호가 공백이 아닌 경우
                 if (!editTextEmail.getText().toString().equals("") && !editTextPassword.getText().toString().equals("")) {
-                    // 이메일과 비밀번호가 공백이 아닌 경우
-                    createUser(editTextEmail.getText().toString(), editTextPassword.getText().toString(), editTextName.getText().toString());
+                    // 이름이 공백이 아닌 경우
+                    if (editTextName.getText().toString() != null) {
+                        createUser(editTextEmail.getText().toString(), editTextPassword.getText().toString(), editTextName.getText().toString());
+
+                        //--------------------------------------------------------------------------------------------------
+                        // 사용자의 정보 데이터 베이스에 저장
+                        UsersInfo.put("Email", editTextEmail.getText().toString().trim());
+                        UsersInfo.put("Password", editTextPassword.getText().toString().trim());
+                        UsersInfo.put("Name", editTextName.getText().toString().trim());
+                        UsersInfo.put("Age", 28);
+                        UsersInfo.put("Sex", "남자");
+                        UsersInfo.put("SubscriptionStatus", true);
+
+                        // 경로 ( UsersData / firebaseAuth.getUid() / Email,Password,Name,Age,Sex,SubscriptionStatus
+                        firebaseDB.collection("UsersData").document(firebaseAuth.getUid())
+                                .set(UsersInfo)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                        Log.d(TAG, "데이터베이스 저장 완료");
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w(TAG, "데이터 베이스 저장 실패");
+                                    }
+                                });
+                    }
+                    //--------------------------------------------------------------------------------------------------
+
                 } else {
                     // 이메일과 비밀번호가 공백인 경우
                     Toast.makeText(JoinActivity.this, "계정과 비밀번호를 입력하세요.", Toast.LENGTH_LONG).show();
@@ -62,9 +100,6 @@ public class JoinActivity extends AppCompatActivity {
         });
 
         //--------------------------------------------------------------------------------------------------
-
-
-
 
     }
 
