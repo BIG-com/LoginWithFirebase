@@ -14,16 +14,23 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 public class FirstLoginActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private FirebaseUser user;
     private FirebaseFirestore firebaseDB;
+    private Map<String, Object> UsersUID;
     private EditText editTextEmail;
     private EditText editTextPassword;
     private Button buttonLogIn;
@@ -40,11 +47,18 @@ public class FirstLoginActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         user = firebaseAuth.getCurrentUser();
         firebaseDB = FirebaseFirestore.getInstance();
+        UsersUID = new HashMap<>();
 
         editTextEmail = (EditText) findViewById(R.id.edittext_email);
         editTextPassword = (EditText) findViewById(R.id.edittext_password);
 
         btn_auth_email_resend = (Button) findViewById(R.id.btn_auth_email_resend);
+
+        //--------------------------------------------------------------------------------------------
+        // UID 데이터 추가
+        UsersUID.put("UID", user.getUid());
+
+        firebaseDB.collection("UsersData").document(user.getEmail()).update(UsersUID);
 
         //--------------------------------------------------------------------------------------------
 
@@ -119,15 +133,5 @@ public class FirstLoginActivity extends AppCompatActivity {
                         }
                     }
                 });
-    }
-    //--------------------------------------------------------------------------------------------
-
-    @Override
-    public void onBackPressed() {
-
-        firebaseAuth.getCurrentUser().delete();
-        firebaseDB.document(user.getUid()).delete();
-
-        super.onBackPressed();
     }
 }

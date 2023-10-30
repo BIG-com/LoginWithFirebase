@@ -1,5 +1,6 @@
 package com.jgs.loginwithfirebase;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -16,13 +17,14 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener firebaseAuthListener;
-    private FirebaseFirestore firebaseDB;
+    private FirebaseUser user;
     private EditText editTextEmail;
     private EditText editTextPassword;
     private Button buttonLogIn;
@@ -32,13 +34,14 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        firebaseDB = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
+        user = firebaseAuth.getCurrentUser();
 
         editTextEmail = (EditText) findViewById(R.id.edittext_email);
         editTextPassword = (EditText) findViewById(R.id.edittext_password);
@@ -47,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
 
         btn_search_id = (Button) findViewById(R.id.btn_search_id);
         btn_search_pwd = (Button) findViewById(R.id.btn_search_pwd);
-
 
 
         //-------------------------------------------------------------------------------------------------
@@ -135,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
         firebaseAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
+                user = firebaseAuth.getCurrentUser();
                 if (user != null && firebaseAuth.getCurrentUser().isEmailVerified()==true) { // 자동으로 로그인 된 케이스
                     //휴대폰의 저장된 토큰이 데이터베이스에 토큰이 지금도 존재하는지 확인
                     user.getIdToken(true)
@@ -157,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             });
                 }
-                else {// 자동으로 로그인 안된 케이스
+                else{
 
                 }
             }
@@ -181,6 +183,9 @@ public class MainActivity extends AppCompatActivity {
                         else if (task.isSuccessful() == true && firebaseAuth.getCurrentUser().isEmailVerified()==false) {
                             // 로그인 실패 (이메일 인증 X)
                             Toast.makeText(MainActivity.this, "이메일 인증이 되지 않았습니다", Toast.LENGTH_SHORT).show();
+                            Intent MainToFirstlogin = new Intent(MainActivity.this, FirstLoginActivity.class);
+                            MainToFirstlogin.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);//액티비티 스택제거
+                            startActivity(MainToFirstlogin);
                         } else if (task.isSuccessful() == false){
                             // 로그인 실패
                             Toast.makeText(MainActivity.this, "아이디 또는 비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show();
